@@ -17,6 +17,11 @@ export default function Hero() {
     setRecommendations([...recommendations, recommendation]);
   };
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
+
   useEffect(() => {
     const fetchRecommendations = async () => {
       const token = Cookies.get("movieToken");
@@ -45,7 +50,7 @@ export default function Hero() {
 
   return (
     <div className="min-h-screen bg-base-200 p-4 overflow-y-auto">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto bg-gray-400 rounded-xl p-10">
         <div className="flex justify-center mb-4">
           <select
             value={category}
@@ -56,15 +61,34 @@ export default function Hero() {
             <option value="movie">Movie</option>
           </select>
         </div>
-        <div className="h-32 overflow-scroll">
-          <RecommendationForm
-            category={category}
-            addRecommendation={addRecommendation}
-          />
+
+        <div>
+          <button
+            onClick={openModal}
+            className="bg-blue-500 text-white px-4 py-2"
+          >
+            Add Book/Movie
+          </button>
+
+          {isOpen && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+              <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
+                <h2 className="text-xl font-bold mb-4">Add Recommendation</h2>
+                <RecommendationForm
+                  category={category}
+                  addRecommendation={addRecommendation}
+                />
+                <button onClick={closeModal} className="mt-4 text-red-500">
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
         </div>
         <RecommendationList
           recommendations={recommendations}
           category={category}
+          className="z-10"
         />
       </div>
     </div>

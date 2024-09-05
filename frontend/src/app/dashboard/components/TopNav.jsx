@@ -1,5 +1,6 @@
 // components/TopBar.js
 "use client";
+import LogoutButton from "@/components/LogoutButton";
 import React, { useState } from "react";
 
 export default function TopBar({ onCategoryChange, onRefresh }) {
@@ -32,6 +33,8 @@ export default function TopBar({ onCategoryChange, onRefresh }) {
       <button onClick={handleRefresh} className="btn btn-secondary">
         Refresh
       </button>
+
+      <LogoutButton />
     </div>
   );
 }

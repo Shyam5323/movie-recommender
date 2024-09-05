@@ -9,7 +9,7 @@ export default function RecommendationForm({ category, addRecommendation }) {
     description: "",
     recommendedBy: "",
     whereToReadOrWatch: "",
-    status: "",
+    status: category === "book" ? "recommended" : "recommended",
   });
 
   const handleInputChange = (event) => {
@@ -54,7 +54,6 @@ export default function RecommendationForm({ category, addRecommendation }) {
         description: "",
         recommendedBy: "",
         whereToReadOrWatch: "",
-        status: "",
       });
     } else {
       // console.log(response);
@@ -142,20 +141,6 @@ export default function RecommendationForm({ category, addRecommendation }) {
           id="whereToReadOrWatch"
           name="whereToReadOrWatch"
           value={formData.whereToReadOrWatch}
-          onChange={handleInputChange}
-          className="input input-bordered w-full"
-          required
-        />
-      </div>
-      <div className="form-group">
-        <label className="label" htmlFor="status">
-          Status:
-        </label>
-        <input
-          type="text"
-          id="status"
-          name="status"
-          value={formData.status}
           onChange={handleInputChange}
           className="input input-bordered w-full"
           required
