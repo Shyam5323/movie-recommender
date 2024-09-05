@@ -21,6 +21,7 @@ const RegisterForm = () => {
     const response = await RegisterUser(name, email, password);
     if (response) {
       Cookies.set("movieToken", response.token, { expires: 7 });
+      Cookies.set("userId", response.user.userId, { expires: 7 });
       router.push("./dashboard");
     } else {
       alert("Registration failed, Try again later");

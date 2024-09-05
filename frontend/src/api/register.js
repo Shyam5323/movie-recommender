@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 export default async function RegisterUser(name, email, password) {
   try {
     const response = await axios.post(
-      "http://localhost:5000/api/v1/auth/register",
+      "https://movie-recommender-jrka.onrender.com/api/v1/auth/register",
       { name, email, password }
     );
     return response.data;

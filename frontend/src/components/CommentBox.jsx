@@ -11,7 +11,7 @@ const CommentBox = ({ recommendationId }) => {
       try {
         const token = Cookies.get("movieToken");
         const response = await fetch(
-          `http://localhost:5000/api/v1/book/${recommendationId}/comments`,
+          `https://movie-recommender-jrka.onrender.com/api/v1/book/${recommendationId}/comments`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -35,7 +35,7 @@ const CommentBox = ({ recommendationId }) => {
     try {
       const token = Cookies.get("movieToken");
       const response = await fetch(
-        `http://localhost:5000/api/v1/book/${recommendationId}/comments`,
+        `https://movie-recommender-jrka.onrender.com/api/v1/book/${recommendationId}/comments`,
         {
           method: "POST",
           headers: {

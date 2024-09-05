@@ -25,7 +25,7 @@ export default function Hero() {
   useEffect(() => {
     const fetchRecommendations = async () => {
       const token = Cookies.get("movieToken");
-      const endpoint = `http://localhost:5000/api/v1/${category}`;
+      const endpoint = `https://movie-recommender-jrka.onrender.com/api/v1/${category}`;
       try {
         const response = await fetch(endpoint, {
           method: "GET",

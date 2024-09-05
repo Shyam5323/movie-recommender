@@ -71,7 +71,7 @@ const LoginForm = () => {
         </form>
 
         <div className="text-sm font-light flex gap-2">
-          Don't have an account?
+          Don&apost have an account?
           <span className="text-sm underline">
             <Link href="./register">Create Account</Link>
           </span>

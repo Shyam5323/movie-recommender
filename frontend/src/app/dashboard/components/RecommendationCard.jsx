@@ -25,7 +25,7 @@ const RecommendationCard = ({
     const token = Cookies.get("movieToken");
 
     const response = await fetch(
-      `http://localhost:5000/api/v1/${category}/${id}`,
+      `https://movie-recommender-jrka.onrender.com/api/v1/${category}/${id}`,
       {
         method: "DELETE",
         headers: {

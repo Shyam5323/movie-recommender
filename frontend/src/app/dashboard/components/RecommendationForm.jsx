@@ -37,14 +37,17 @@ export default function RecommendationForm({ category, addRecommendation }) {
     console.log(dataToSend);
 
     const token = Cookies.get("movieToken");
-    const response = await fetch(`http://localhost:5000/api/v1/${category}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(dataToSend),
-    });
+    const response = await fetch(
+      `https://movie-recommender-jrka.onrender.com/api/v1/${category}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(dataToSend),
+      }
+    );
     if (response.ok) {
       alert("Recommendation added successfully");
       setFormData({
