@@ -27,6 +27,7 @@ const movieSchema = new mongoose.Schema({
         ref: "User",
         required: true,
       },
+      authorName: String,
       createdAt: {
         type: Date,
         default: Date.now,

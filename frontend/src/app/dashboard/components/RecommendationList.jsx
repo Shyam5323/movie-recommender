@@ -7,6 +7,7 @@ const currentUser = {
   userId: Cookies.get("userId"),
 };
 const RecommendationList = ({ recommendations, category }) => {
+  console.log(recommendations);
   return (
     <div className="mt-8 grid grid-cols-1 gap-4">
       {recommendations.map((rec, index) => (

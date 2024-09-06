@@ -13,11 +13,14 @@ const RecommendationCard = ({
   genre,
   description,
   recommendedBy,
-  whereToReadOrWatch,
+  whereToRead,
+  whereToWatch,
   status,
   category,
   createdBy,
 }) => {
+  console.log(whereToRead);
+  console.log(whereToWatch);
   const [isCommentBoxOpen, setIsCommentBoxOpen] = useState(false);
 
   // Function to delete
@@ -66,12 +69,10 @@ const RecommendationCard = ({
         <p>
           <strong>
             {category === "book" ? "Where to Read" : "Where to Watch"}:
-          </strong>{" "}
-          {whereToReadOrWatch}
+          </strong>
+          {category === "book" ? whereToRead : whereToWatch}
         </p>
-        <p>
-          <strong>Status:</strong> {status}
-        </p>
+
         {/* Show delete button only to the user who created the recommendation */}
         {currentUser.userId === createdBy && (
           <button

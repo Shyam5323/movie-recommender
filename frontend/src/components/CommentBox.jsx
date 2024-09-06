@@ -46,6 +46,7 @@ const CommentBox = ({ recommendationId, category, currentUser }) => {
     setLoading(true);
     try {
       const token = Cookies.get("movieToken");
+      const userName = Cookies.get("userName");
       const response = await fetch(
         `http://localhost:5000/api/v1/${category}/${recommendationId}/comments`,
         {
@@ -54,7 +55,7 @@ const CommentBox = ({ recommendationId, category, currentUser }) => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ text: newComment }),
+          body: JSON.stringify({ text: newComment, authorName: userName }),
         }
       );
 
@@ -102,7 +103,7 @@ const CommentBox = ({ recommendationId, category, currentUser }) => {
           comments.map((comment) => (
             <div key={comment.id} className="flex justify-between items-center">
               <p>
-                <strong>{comment.author}</strong>: {comment.text}
+                <strong>{comment.authorName}</strong>: {comment.text}
               </p>
 
               {comment.author === currentUser.userId && (

@@ -22,6 +22,7 @@ const RegisterForm = () => {
     if (response) {
       Cookies.set("movieToken", response.token, { expires: 7 });
       Cookies.set("userId", response.user.userId, { expires: 7 });
+      Cookies.set("userName", response.user.name, { expires: 7 });
       router.push("./dashboard");
     } else {
       alert("Registration failed, Try again later");

@@ -21,6 +21,7 @@ const LoginForm = () => {
     if (response) {
       Cookies.set("movieToken", response.token, { expires: 7 });
       Cookies.set("userId", response.user.userId, { expires: 7 });
+      Cookies.set("userName", response.user.name);
       router.push("./dashboard");
     } else {
       alert("login failed, Try again later");

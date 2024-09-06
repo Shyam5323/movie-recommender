@@ -2,7 +2,9 @@ import Cookies from "js-cookie";
 import { useState } from "react";
 
 export default function RecommendationForm({ category, userOrRec }) {
-  console.log(category);
+  const token = Cookies.get("movieToken");
+  const userName = Cookies.get("userName");
+
   const determineInitialStatus = (category, userOrRec) => {
     if (userOrRec === "rec") {
       return "recommended";
@@ -11,19 +13,24 @@ export default function RecommendationForm({ category, userOrRec }) {
     }
     return "recommended";
   };
+
   const [formData, setFormData] = useState({
     title: "",
     authorOrDirector: "",
     genre: "",
     description: "",
-    recommendedBy: "",
-    whereToReadOrWatch: "",
+    recommendedBy: userName,
+    whereToRead: category === "book" ? "" : undefined,
+    whereToWatch: category === "movie" ? "" : undefined,
     status: determineInitialStatus(category, userOrRec),
   });
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (event) => {
@@ -32,20 +39,20 @@ export default function RecommendationForm({ category, userOrRec }) {
       title: formData.title,
       genre: formData.genre,
       description: formData.description,
-      recommendedBy: formData.recommendedBy,
       status: formData.status,
+      recommendedBy: formData.recommendedBy,
+      whereToRead: category === "book" ? formData.whereToRead : undefined,
+      whereToWatch: category === "movie" ? formData.whereToWatch : undefined,
     };
 
     if (category === "book") {
       dataToSend.author = formData.authorOrDirector;
-      dataToSend.whereToRead = formData.whereToReadOrWatch;
     } else if (category === "movie") {
       dataToSend.director = formData.authorOrDirector;
-      dataToSend.whereToWatch = formData.whereToReadOrWatch;
     }
+
     console.log(dataToSend);
 
-    const token = Cookies.get("movieToken");
     const response = await fetch(`http://localhost:5000/api/v1/${category}`, {
       method: "POST",
       headers: {
@@ -54,6 +61,7 @@ export default function RecommendationForm({ category, userOrRec }) {
       },
       body: JSON.stringify(dataToSend),
     });
+
     if (response.ok) {
       alert("Recommendation added successfully");
       setFormData({
@@ -61,12 +69,14 @@ export default function RecommendationForm({ category, userOrRec }) {
         authorOrDirector: "",
         genre: "",
         description: "",
-        recommendedBy: "",
-        whereToReadOrWatch: "",
+        recommendedBy: userName,
+        whereToRead: category === "book" ? "" : undefined,
+        whereToWatch: category === "movie" ? "" : undefined,
+        status: determineInitialStatus(category, userOrRec),
       });
     } else {
-      console.log(response);
-      alert("Failed to add recommendations");
+      console.error("Failed to add recommendation:", response);
+      alert("Failed to add recommendation");
     }
   };
 
@@ -127,34 +137,38 @@ export default function RecommendationForm({ category, userOrRec }) {
           required
         />
       </div>
-      <div className="form-group">
-        <label className="label" htmlFor="recommendedBy">
-          Recommended By:
-        </label>
-        <input
-          type="text"
-          id="recommendedBy"
-          name="recommendedBy"
-          value={formData.recommendedBy}
-          onChange={handleInputChange}
-          className="input input-bordered w-full"
-          required
-        />
-      </div>
-      <div className="form-group">
-        <label className="label" htmlFor="whereToReadOrWatch">
-          {category === "book" ? "Where to Read" : "Where to Watch"}:
-        </label>
-        <input
-          type="text"
-          id="whereToReadOrWatch"
-          name="whereToReadOrWatch"
-          value={formData.whereToReadOrWatch}
-          onChange={handleInputChange}
-          className="input input-bordered w-full"
-          required
-        />
-      </div>
+      {category === "book" && (
+        <div className="form-group">
+          <label className="label" htmlFor="whereToRead">
+            Where to Read:
+          </label>
+          <input
+            type="text"
+            id="whereToRead"
+            name="whereToRead"
+            value={formData.whereToRead}
+            onChange={handleInputChange}
+            className="input input-bordered w-full"
+            required
+          />
+        </div>
+      )}
+      {category === "movie" && (
+        <div className="form-group">
+          <label className="label" htmlFor="whereToWatch">
+            Where to Watch:
+          </label>
+          <input
+            type="text"
+            id="whereToWatch"
+            name="whereToWatch"
+            value={formData.whereToWatch}
+            onChange={handleInputChange}
+            className="input input-bordered w-full"
+            required
+          />
+        </div>
+      )}
       <button type="submit" className="btn btn-primary w-full">
         Add Recommendation
       </button>

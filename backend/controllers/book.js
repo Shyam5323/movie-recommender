@@ -103,7 +103,7 @@ const deleteBook = async (req, res) => {
 const addCommentToBook = async (req, res) => {
   try {
     const { bookId } = req.params;
-    const { text } = req.body;
+    const { text, authorName } = req.body;
     const userId = req.user.userId;
 
     const book = await Book.findById(bookId);
@@ -111,7 +111,7 @@ const addCommentToBook = async (req, res) => {
       throw new NotFoundError("Book not found");
     }
 
-    book.comments.push({ text, author: userId });
+    book.comments.push({ text, author: userId, authorName });
     await book.save();
 
     res.status(StatusCodes.CREATED).json(book.comments);
