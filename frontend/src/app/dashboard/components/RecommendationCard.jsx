@@ -25,7 +25,7 @@ const RecommendationCard = ({
     const token = Cookies.get("movieToken");
 
     const response = await fetch(
-      `https://movie-recommender-jrka.onrender.com/api/v1/${category}/${id}`,
+      `http://localhost:5000/api/v1/${category}/${id}`,
       {
         method: "DELETE",
         headers: {
@@ -93,7 +93,11 @@ const RecommendationCard = ({
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
               <h2 className="text-xl font-bold mb-4">Comments</h2>
-              <CommentBox recommendationId={_id} category={category} />
+              <CommentBox
+                recommendationId={_id}
+                category={category}
+                currentUser={currentUser}
+              />
               <button
                 onClick={closeCommentBox}
                 className="mt-4 text-red-500 hover:text-red-700"

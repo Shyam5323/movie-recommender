@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 
-const CommentBox = ({ recommendationId }) => {
+const CommentBox = ({ recommendationId, category, currentUser }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState(null); // To store the user's ID
 
   useEffect(() => {
     const fetchComments = async () => {
       try {
         const token = Cookies.get("movieToken");
+        const userIdFromToken = parseJwt(token).userId; // Assuming your JWT contains user ID
+        setUserId(userIdFromToken);
+
         const response = await fetch(
-          `https://movie-recommender-jrka.onrender.com/api/v1/book/${recommendationId}/comments`,
+          `http://localhost:5000/api/v1/${category}/${recommendationId}/comments`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -28,6 +32,14 @@ const CommentBox = ({ recommendationId }) => {
     fetchComments();
   }, [recommendationId]);
 
+  const parseJwt = (token) => {
+    try {
+      return JSON.parse(atob(token.split(".")[1]));
+    } catch (e) {
+      return null;
+    }
+  };
+
   const handlePostComment = async () => {
     if (!newComment.trim()) return;
 
@@ -35,7 +47,7 @@ const CommentBox = ({ recommendationId }) => {
     try {
       const token = Cookies.get("movieToken");
       const response = await fetch(
-        `https://movie-recommender-jrka.onrender.com/api/v1/book/${recommendationId}/comments`,
+        `http://localhost:5000/api/v1/${category}/${recommendationId}/comments`,
         {
           method: "POST",
           headers: {
@@ -60,14 +72,48 @@ const CommentBox = ({ recommendationId }) => {
     }
   };
 
+  const handleDeleteComment = async (commentId) => {
+    try {
+      const token = Cookies.get("movieToken");
+      const response = await fetch(
+        `http://localhost:5000/api/v1/${category}/${recommendationId}/comments/${commentId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        setComments(comments.filter((comment) => comment.id !== commentId));
+      } else {
+        alert("Failed to delete comment");
+      }
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
+
   return (
     <div>
       <div className="mb-4 max-h-40 overflow-y-auto">
         {comments.length > 0 ? (
-          comments.map((comment, index) => (
-            <p key={index}>
-              <strong>{comment.userId}</strong>: {comment.text}
-            </p>
+          comments.map((comment) => (
+            <div key={comment.id} className="flex justify-between items-center">
+              <p>
+                <strong>{comment.author}</strong>: {comment.text}
+              </p>
+
+              {comment.author === currentUser.userId && (
+                <button
+                  onClick={() => handleDeleteComment(comment._id)}
+                  className="text-red-500 ml-2"
+                >
+                  Delete
+                </button>
+              )}
+            </div>
           ))
         ) : (
           <p>No comments yet. Be the first to comment!</p>

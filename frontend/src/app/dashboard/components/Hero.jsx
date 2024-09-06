@@ -25,7 +25,7 @@ export default function Hero() {
   useEffect(() => {
     const fetchRecommendations = async () => {
       const token = Cookies.get("movieToken");
-      const endpoint = `https://movie-recommender-jrka.onrender.com/api/v1/${category}`;
+      const endpoint = `http://localhost:5000/api/v1/${category}`;
       try {
         const response = await fetch(endpoint, {
           method: "GET",
@@ -77,6 +77,7 @@ export default function Hero() {
                 <RecommendationForm
                   category={category}
                   addRecommendation={addRecommendation}
+                  userOrRec={"rec"}
                 />
                 <button onClick={closeModal} className="mt-4 text-red-500">
                   Close

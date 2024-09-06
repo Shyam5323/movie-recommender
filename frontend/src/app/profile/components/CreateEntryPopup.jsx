@@ -1,16 +1,7 @@
 import Cookies from "js-cookie";
 import { useState } from "react";
 
-export default function RecommendationForm({ category, userOrRec }) {
-  console.log(category);
-  const determineInitialStatus = (category, userOrRec) => {
-    if (userOrRec === "rec") {
-      return "recommended";
-    } else if (userOrRec === "user") {
-      return category === "book" ? "read" : "watched";
-    }
-    return "recommended";
-  };
+export default function RecommendationForm({ category, addRecommendation }) {
   const [formData, setFormData] = useState({
     title: "",
     authorOrDirector: "",
@@ -18,7 +9,7 @@ export default function RecommendationForm({ category, userOrRec }) {
     description: "",
     recommendedBy: "",
     whereToReadOrWatch: "",
-    status: determineInitialStatus(category, userOrRec),
+    status: category === "book" ? "recommended" : "recommended",
   });
 
   const handleInputChange = (event) => {
@@ -65,7 +56,7 @@ export default function RecommendationForm({ category, userOrRec }) {
         whereToReadOrWatch: "",
       });
     } else {
-      console.log(response);
+      // console.log(response);
       alert("Failed to add recommendations");
     }
   };
